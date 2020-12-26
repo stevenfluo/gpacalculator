@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="author" content="Steven Luo">
+<title>GPA Calculator</title>
+<style>
+    /* @import "reset.css"; */
+
+    body {
+        font-size: 12pt;
+        margin: 45px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 36pt;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: center;
+        padding: 10px;
+        width: 500px;
+    }
+
+    table {
+        margin-top: 30px;
+    }
+
+    tr:not(.calculatortablesubhead):hover {
+        background-color: #47b881;
+        color: white;
+    }
+
+    th {
+        background-color: #20685d;
+        color: white;
+    }
+
+    .calculatortablehead {
+        font-weight: bolder;
+        font-size: 16pt;
+    }
+
+    .calculatortablesubhead {
+        font-weight: bold;
+        font-size: 14pt;
+        background-color: #cbebdb;
+    }
+
+    button {
+        margin-top: 20px;
+        width: 100px;
+        height: 50px;
+        font-size: 14pt;
+    }
+
+</style>
+</head>
+
+<body>
+    <h1>High School Grade Point Average Calculator</h1>
+    <div id="explanation">
+        <h2>About the Grade Point Average (GPA)</h2>
+        <p>Students receive 1 set of grades per semester, 2 per year.
+            Grades of P for Pass or NP for Not Passed are not calculated into the GPA.
+            GPA can be either weighted or unweighted. The main difference between two types of GPA is that the weighted GPA includes an extra point for AP courses.
+        </p>
+        <p>All GPAs are calculated by assigning each letter grade a number value according to the graph listed below.
+            The total sum of grade points is then divided by the number of classes in the calculation.
+            Some teachers use pluses and minuses (+ or -) in the reporting of grades, however it is not calculated into the GPA.<p>
+
+        <img src="https://i.imgur.com/Sj9dSTp.png" alt="GPA chart" style="width:45%"/>
+
+        <p><i>Adapted from the <a href="https://evhscounseling.wixsite.com/evcounseling/calculating-the-gpa">Evergreen Valley High School Counseling Website</a></i></p>
+
+        <h2>Using the GPA Calculator</h2>
+        <p>You will need your report card or transcript to use this calculator.</p>
+        <p>Count the number of A grades you've received in <i><b>regular (non-AP/IB/Honors) classes</b></i>. Input that number into the first row.
+            Repeat this process for each of the letter grades.<p>
+        <p>In the "AP/IB/Honors Classes" Section, count the number of A grades you've received in <i><b>AP/IB/Honors classes</b></i>. Input that number into the first row.
+            Repeat this process for each of the letter grades.<p>
+        <p>Once you are finished, click on the "Calculate" button or press the "Enter" key on your keyboard to display your Weighted and Unweighted GPAs.
+            To reset all values back to 0, click on the "Reset" button.</p>
+    </div>
+    <div id="calculator">
+        <form>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="calculatortablehead">Grade</th>
+                        <th class="calculatortablehead">Number</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr class="calculatortablesubhead">
+                        <td colspan="2">Regular Classes</td>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td><input type="number" id="uwgradeinput1" min="0" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td><input type="number" id="uwgradeinput2" min="0" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td><input type="number" id="uwgradeinput3" min="0" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td><input type="number" id="uwgradeinput4" min="0" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>F</td>
+                        <td><input type="number" id="uwgradeinput5" min="0" value="0"></td>
+                    </tr>
+                    <tr class="calculatortablesubhead">
+                        <td colspan="2">AP/IB/Honors Classes</td>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td><input type="number" id="wgradeinput1" min="0" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td><input type="number" id="wgradeinput2" min="0" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td><input type="number" id="wgradeinput3" min="0" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td><input type="number" id="wgradeinput4" min="0" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>F</td>
+                        <td><input type="number" id="wgradeinput5" min="0" value="0"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button id="calculateGPA" type="button">Calculate</button>
+            <button type="reset" id="resetbutton">Reset</button>
+        </form>
+    </div>
+</body>
+
+</html>
+
+<script>
+document.getElementById("calculateGPA").addEventListener("click", calculateGPA, false);
+document.addEventListener('keyup',function(e){
+    if (e.keyCode === 13) { // Runs the calculate function if enter key pressed
+    calculateGPA();
+  }
+});
+
+function calculateGPA() {
+    //console.log("Calculating GPA");
+    var inputtype = "uw";
+    var numgrades = 0;
+    var calculatedWGPA = 0;
+    var calculatedUWGPA = 0;
+
+    for (var i = 0; i<2; i++) {
+        for (var j = 1; j<6; j++) {
+            inputtoaccess = inputtype + "gradeinput" + j;
+            //console.log("inputtoaccess " + inputtoaccess);
+            inputvalue = parseInt(document.getElementById(inputtoaccess).value) || 0;
+            //console.log("value "+ inputvalue);
+            numgrades += inputvalue;
+            //console.log("numgrades "+ numgrades);
+
+            // Weighted GPA
+            if (inputtype=="w" && j==1) {
+                calculatedWGPA += inputvalue*5;
+            } else if ((inputtype=="uw" && j==1) || (inputtype=="w" && j==2)) {
+                calculatedWGPA += inputvalue*4;
+            } else if ((inputtype=="uw" && j==2) || (inputtype=="w" && j==3)) {
+                calculatedWGPA += inputvalue*3;
+            } else if (inputtype=="uw" && j==3) {
+                calculatedWGPA += inputvalue*2;
+            } else if (j==4) {
+                calculatedWGPA += inputvalue*1;
+            } else if (j==5) {
+                calculatedWGPA += inputvalue*0;
+            }
+
+            // Unweighted GPA
+            for (var k=1; k<6; k++) {
+                if (j==k) {
+                    calculatedUWGPA += (5-j)*inputvalue;
+                }
+            }
+        }
+        inputtype = "w";
+    }
+    //console.log(calculatedWGPA);
+    calculatedWGPA /= numgrades;
+    calculatedUWGPA /= numgrades;
+    alert("Weighted GPA: " + calculatedWGPA + "\nUnweighted GPA: " + calculatedUWGPA);
+}
+</script>
